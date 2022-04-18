@@ -1,4 +1,8 @@
 import React from "react";
+import axios from "axios";
+
+
+const url = `http://localhost:9000/api/result`
 
 export default class AppClass extends React.Component {
   constructor(props) {
@@ -24,6 +28,8 @@ export default class AppClass extends React.Component {
         if (this.state.y > 1) {
           document.getElementById("grid").children[this.state.currentIndex].classList = 'square'
           document.getElementById("grid").children[this.state.currentIndex - 3].classList += ' active'
+          document.getElementById("grid").children[this.state.currentIndex].textContent = ''
+          document.getElementById("grid").children[this.state.currentIndex - 3].textContent = 'B'
           await this.setState({ ...this.state, y: this.state.y - 1, numberOfSteps: this.state.numberOfSteps+1, currentIndex: this.state.currentIndex - 3});
         }
         break;
@@ -31,6 +37,8 @@ export default class AppClass extends React.Component {
         if (this.state.y < 3) {
           document.getElementById("grid").children[this.state.currentIndex].classList = 'square'
           document.getElementById("grid").children[this.state.currentIndex + 3].classList += ' active'
+          document.getElementById("grid").children[this.state.currentIndex].textContent = ''
+          document.getElementById("grid").children[this.state.currentIndex + 3].textContent = 'B'
           await this.setState({ ...this.state, y: this.state.y + 1, numberOfSteps: this.state.numberOfSteps+1, currentIndex: this.state.currentIndex + 3});
         }
         break;
@@ -38,6 +46,8 @@ export default class AppClass extends React.Component {
         if (this.state.x > 1) {
           document.getElementById("grid").children[this.state.currentIndex].classList = 'square'
           document.getElementById("grid").children[this.state.currentIndex - 1].classList += ' active'
+          document.getElementById("grid").children[this.state.currentIndex].textContent = ''
+          document.getElementById("grid").children[this.state.currentIndex - 1].textContent = 'B'
           await this.setState({ ...this.state, x: this.state.x - 1, numberOfSteps: this.state.numberOfSteps+1, currentIndex: this.state.currentIndex - 1 });
         }
         break;
@@ -45,6 +55,8 @@ export default class AppClass extends React.Component {
         if (this.state.x < 3) {
           document.getElementById("grid").children[this.state.currentIndex].classList = 'square'
           document.getElementById("grid").children[this.state.currentIndex + 1].classList += ' active'
+          document.getElementById("grid").children[this.state.currentIndex].textContent = ''
+          document.getElementById("grid").children[this.state.currentIndex + 1].textContent = 'B'
           await this.setState({ ...this.state, x: this.state.x + 1, numberOfSteps: this.state.numberOfSteps+1, currentIndex: this.state.currentIndex + 1 });
         }
         break;
@@ -57,12 +69,26 @@ export default class AppClass extends React.Component {
   handleReset = (e)=>{
     document.getElementById("grid").children[this.state.currentIndex].classList = 'square'
     document.getElementById("grid").children[4].classList = 'square active'
+    document.getElementById("grid").children[this.state.currentIndex].textContent = ''
+    document.getElementById("grid").children[4].textContent = 'B'
     this.setState({
       x: 2,
       y: 2,
       numberOfSteps: 0,
       email: "",
       currentIndex: 4
+    })
+  }
+
+  handlesubmit = (e) => {
+    e.preventDefault()
+
+    axios.post(url, {email: this.state.email.toString(), steps: this.state.numberOfSteps, x: this.state.x, y: this.state.y})
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((error)=>{
+      console.log(error)
     })
   }
   render() {
@@ -78,7 +104,7 @@ export default class AppClass extends React.Component {
           <div className="square"></div>
           <div className="square"></div>
           <div className="square"></div>
-          <div className="square active"></div>
+          <div className="square active">B</div>
           <div className="square"></div>
           <div className="square"></div>
           <div className="square"></div>
@@ -112,7 +138,7 @@ export default class AppClass extends React.Component {
             value={this.state.email}
             onChange={this.handleInput}
           ></input>
-          <input id="submit" type="submit"></input>
+          <input id="submit" type="submit" onClick={this.handlesubmit}></input>
         </form>
       </div>
     );
