@@ -13,6 +13,7 @@ export default class AppClass extends React.Component {
       numberOfSteps: 0,
       email: "",
       currentIndex: 4,
+      resultsMessage: "",
     };
   }
 
@@ -72,11 +73,13 @@ export default class AppClass extends React.Component {
     document.getElementById("grid").children[this.state.currentIndex].textContent = ''
     document.getElementById("grid").children[4].textContent = 'B'
     this.setState({
+      ...this.state,
       x: 2,
       y: 2,
       numberOfSteps: 0,
       email: "",
       currentIndex: 4
+
     })
   }
 
@@ -85,11 +88,13 @@ export default class AppClass extends React.Component {
 
     axios.post(url, {email: this.state.email.toString(), steps: this.state.numberOfSteps, x: this.state.x, y: this.state.y})
     .then((res) => {
+      this.setState({ ...this.state, email:"", resultsMessage: res.data.message})
       console.log(res)
     })
     .catch((error)=>{
       console.log(error)
     })
+    
   }
   render() {
     const { className } = this.props;
@@ -111,7 +116,7 @@ export default class AppClass extends React.Component {
           <div className="square"></div>
         </div>
         <div className="info">
-          <h3 id="message"></h3>
+          <h3 id="message">{this.state.resultsMessage}</h3>
         </div>
         <div id="keypad">
           <button onClick={this.handleDirectionalInput} id="left">
