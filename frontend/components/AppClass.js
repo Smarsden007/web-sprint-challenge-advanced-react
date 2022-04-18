@@ -17,43 +17,52 @@ export default class AppClass extends React.Component {
     this.setState({ ...this.state, email: [e.target.value] });
   };
 
-  handleDirectionalInput = (e) => {
+  handleDirectionalInput = async (e) => {
     e.preventDefault();
     switch (e.target.id) {
       case "up":
         if (this.state.y > 1) {
-          this.setState({ ...this.state, y: this.state.y - 1, numberOfSteps: this.state.numberOfSteps+1 });
           document.getElementById("grid").children[this.state.currentIndex].classList = 'square'
-          document.getElementById("grid").children[this.state.currentIndex -3].classList = 'square active'
+          document.getElementById("grid").children[this.state.currentIndex - 3].classList += ' active'
+          await this.setState({ ...this.state, y: this.state.y - 1, numberOfSteps: this.state.numberOfSteps+1, currentIndex: this.state.currentIndex - 3});
         }
         break;
       case "down":
         if (this.state.y < 3) {
-          this.setState({ ...this.state, y: this.state.y + 1, numberOfSteps: this.state.numberOfSteps+1});
+          document.getElementById("grid").children[this.state.currentIndex].classList = 'square'
+          document.getElementById("grid").children[this.state.currentIndex + 3].classList += ' active'
+          await this.setState({ ...this.state, y: this.state.y + 1, numberOfSteps: this.state.numberOfSteps+1, currentIndex: this.state.currentIndex + 3});
         }
         break;
       case "left":
         if (this.state.x > 1) {
-          this.setState({ ...this.state, x: this.state.x - 1, numberOfSteps: this.state.numberOfSteps+1 });
+          document.getElementById("grid").children[this.state.currentIndex].classList = 'square'
+          document.getElementById("grid").children[this.state.currentIndex - 1].classList += ' active'
+          await this.setState({ ...this.state, x: this.state.x - 1, numberOfSteps: this.state.numberOfSteps+1, currentIndex: this.state.currentIndex - 1 });
         }
         break;
       case "right":
         if (this.state.x < 3) {
-          this.setState({ ...this.state, x: this.state.x + 1, numberOfSteps: this.state.numberOfSteps+1 });
+          document.getElementById("grid").children[this.state.currentIndex].classList = 'square'
+          document.getElementById("grid").children[this.state.currentIndex + 1].classList += ' active'
+          await this.setState({ ...this.state, x: this.state.x + 1, numberOfSteps: this.state.numberOfSteps+1, currentIndex: this.state.currentIndex + 1 });
         }
         break;
       default:
         break;
     }
-    console.log("##########", this.state.x, this.state.y);
+    console.log("##########",this.state);
   };
   
   handleReset = (e)=>{
+    document.getElementById("grid").children[this.state.currentIndex].classList = 'square'
+    document.getElementById("grid").children[4].classList = 'square active'
     this.setState({
       x: 2,
       y: 2,
       numberOfSteps: 0,
       email: "",
+      currentIndex: 4
     })
   }
   render() {
