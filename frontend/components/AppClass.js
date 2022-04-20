@@ -1,9 +1,7 @@
 import React from "react";
 import axios from "axios";
 
-
-
-const url = `http://localhost:9000/api/result`
+const url = `http://localhost:9000/api/result`;
 
 export default class AppClass extends React.Component {
   constructor(props) {
@@ -28,59 +26,118 @@ export default class AppClass extends React.Component {
     switch (e.target.id) {
       case "up":
         if (this.state.y > 1) {
-          document.getElementById("grid").children[this.state.currentIndex].classList = 'square'
-          document.getElementById("grid").children[this.state.currentIndex - 3].classList += ' active'
-          document.getElementById("grid").children[this.state.currentIndex].textContent = ''
-          document.getElementById("grid").children[this.state.currentIndex - 3].textContent = 'B'
-          await this.setState({ ...this.state, y: this.state.y - 1, numberOfSteps: this.state.numberOfSteps+1, currentIndex: this.state.currentIndex - 3});
+          document.getElementById("grid").children[
+            this.state.currentIndex
+          ].classList = "square";
+          document.getElementById("grid").children[
+            this.state.currentIndex - 3
+          ].classList += " active";
+          document.getElementById("grid").children[
+            this.state.currentIndex
+          ].textContent = "";
+          document.getElementById("grid").children[
+            this.state.currentIndex - 3
+          ].textContent = "B";
+          await this.setState({
+            ...this.state,
+            y: this.state.y - 1,
+            numberOfSteps: this.state.numberOfSteps + 1,
+            currentIndex: this.state.currentIndex - 3,
+          });
         } else {
-          this.setState({...this.state, resultsMessage:"You can't go up"})
+          this.setState({ ...this.state, resultsMessage: "You can't go up" });
         }
-        
+
         break;
       case "down":
         if (this.state.y < 3) {
-          document.getElementById("grid").children[this.state.currentIndex].classList = 'square'
-          document.getElementById("grid").children[this.state.currentIndex + 3].classList += ' active'
-          document.getElementById("grid").children[this.state.currentIndex].textContent = ''
-          document.getElementById("grid").children[this.state.currentIndex + 3].textContent = 'B'
-          await this.setState({ ...this.state, y: this.state.y + 1, numberOfSteps: this.state.numberOfSteps+1, currentIndex: this.state.currentIndex + 3});
-        }else {
-          this.setState({...this.state, resultsMessage:"You can't go down"})
+          document.getElementById("grid").children[
+            this.state.currentIndex
+          ].classList = "square";
+          document.getElementById("grid").children[
+            this.state.currentIndex + 3
+          ].classList += " active";
+          document.getElementById("grid").children[
+            this.state.currentIndex
+          ].textContent = "";
+          document.getElementById("grid").children[
+            this.state.currentIndex + 3
+          ].textContent = "B";
+          await this.setState({
+            ...this.state,
+            y: this.state.y + 1,
+            numberOfSteps: this.state.numberOfSteps + 1,
+            currentIndex: this.state.currentIndex + 3,
+          });
+        } else {
+          this.setState({ ...this.state, resultsMessage: "You can't go down" });
         }
         break;
       case "left":
         if (this.state.x > 1) {
-          document.getElementById("grid").children[this.state.currentIndex].classList = 'square'
-          document.getElementById("grid").children[this.state.currentIndex - 1].classList += ' active'
-          document.getElementById("grid").children[this.state.currentIndex].textContent = ''
-          document.getElementById("grid").children[this.state.currentIndex - 1].textContent = 'B'
-          await this.setState({ ...this.state, x: this.state.x - 1, numberOfSteps: this.state.numberOfSteps+1, currentIndex: this.state.currentIndex - 1 });
-        }else {
-          this.setState({...this.state, resultsMessage:"You can't go left"})
+          document.getElementById("grid").children[
+            this.state.currentIndex
+          ].classList = "square";
+          document.getElementById("grid").children[
+            this.state.currentIndex - 1
+          ].classList += " active";
+          document.getElementById("grid").children[
+            this.state.currentIndex
+          ].textContent = "";
+          document.getElementById("grid").children[
+            this.state.currentIndex - 1
+          ].textContent = "B";
+          await this.setState({
+            ...this.state,
+            x: this.state.x - 1,
+            numberOfSteps: this.state.numberOfSteps + 1,
+            currentIndex: this.state.currentIndex - 1,
+          });
+        } else {
+          this.setState({ ...this.state, resultsMessage: "You can't go left" });
         }
         break;
       case "right":
         if (this.state.x < 3) {
-          document.getElementById("grid").children[this.state.currentIndex].classList = 'square'
-          document.getElementById("grid").children[this.state.currentIndex + 1].classList += ' active'
-          document.getElementById("grid").children[this.state.currentIndex].textContent = ''
-          document.getElementById("grid").children[this.state.currentIndex + 1].textContent = 'B'
-          await this.setState({ ...this.state, x: this.state.x + 1, numberOfSteps: this.state.numberOfSteps+1, currentIndex: this.state.currentIndex + 1 });
-        }else {
-          this.setState({...this.state, resultsMessage:"You can't go right"})
+          document.getElementById("grid").children[
+            this.state.currentIndex
+          ].classList = "square";
+          document.getElementById("grid").children[
+            this.state.currentIndex + 1
+          ].classList += " active";
+          document.getElementById("grid").children[
+            this.state.currentIndex
+          ].textContent = "";
+          document.getElementById("grid").children[
+            this.state.currentIndex + 1
+          ].textContent = "B";
+          await this.setState({
+            ...this.state,
+            x: this.state.x + 1,
+            numberOfSteps: this.state.numberOfSteps + 1,
+            currentIndex: this.state.currentIndex + 1,
+          });
+        } else {
+          this.setState({
+            ...this.state,
+            resultsMessage: "You can't go right",
+          });
         }
         break;
       default:
         break;
     }
   };
-  
-  handleReset = (e)=>{
-    document.getElementById("grid").children[this.state.currentIndex].classList = 'square'
-    document.getElementById("grid").children[4].classList = 'square active'
-    document.getElementById("grid").children[this.state.currentIndex].textContent = ''
-    document.getElementById("grid").children[4].textContent = 'B'
+
+  handleReset = (e) => {
+    document.getElementById("grid").children[
+      this.state.currentIndex
+    ].classList = "square";
+    document.getElementById("grid").children[4].classList = "square active";
+    document.getElementById("grid").children[
+      this.state.currentIndex
+    ].textContent = "";
+    document.getElementById("grid").children[4].textContent = "B";
     this.setState({
       ...this.state,
       x: 2,
@@ -88,27 +145,43 @@ export default class AppClass extends React.Component {
       numberOfSteps: 0,
       email: "",
       currentIndex: 4,
-      resultsMessage: ""
-
-    })
-  }
+      resultsMessage: "",
+    });
+  };
 
   handlesubmit = (e) => {
-    e.preventDefault()
-    if(this.state.email === '') {
-      this.setState({...this.state, resultsMessage: 'Ouch: email is required'})
-      return
+    e.preventDefault();
+    if (this.state.email === "") {
+      this.setState({
+        ...this.state,
+        resultsMessage: "Ouch: email is required",
+      });
+      return;
     }
 
-    axios.post(url, {email: this.state.email.toString(), steps: this.state.numberOfSteps, x: this.state.x, y: this.state.y})
-    .then((res) => {
-      this.setState({ ...this.state, email:"", resultsMessage: res.data.message})
-    })
-    .catch((error)=>{
-      console.log("### error.response.message ", error.resposnse.message)
-      this.setState({ ...this.state, email:"", resultsMessage: error.resposnse})
-    })
-  }
+    axios
+      .post(url, {
+        email: this.state.email.toString(),
+        steps: this.state.numberOfSteps,
+        x: this.state.x,
+        y: this.state.y,
+      })
+      .then((res) => {
+        this.setState({
+          ...this.state,
+          email: "",
+          resultsMessage: res.data.message,
+        });
+      })
+      .catch((error) => {
+        console.log("### error.response.message ", error.resposnse.message);
+        this.setState({
+          ...this.state,
+          email: "",
+          resultsMessage: error.resposnse,
+        });
+      });
+  };
   render() {
     const { className } = this.props;
     return (

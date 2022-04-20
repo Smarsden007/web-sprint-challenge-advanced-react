@@ -165,6 +165,7 @@ export default function AppFunctional(props) {
         <h3 id="coordinates">Coordinates ({state.x}, {state.y})</h3>
         <h3 id="steps">{state.stepsMessage}</h3>
       </div>
+      {/* ////sssssss */}
       <div id="grid">
         <div className="square"></div>
         <div className="square"></div>
