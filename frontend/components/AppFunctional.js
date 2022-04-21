@@ -34,11 +34,16 @@ export default function AppFunctional(props) {
           document.getElementById("grid").children[
             state.currentIndex - 3
           ].textContent = "B";
-          await setState({
+          let newStepMessage = `You moved ${state.numberOfSteps + 1} time`
+          if(state.numberOfSteps + 1 !== 1) {
+            newStepMessage = newStepMessage + 's'
+          }
+           setState({
             ...state,
             y: state.y - 1,
             numberOfSteps: state.numberOfSteps + 1,
             currentIndex: state.currentIndex - 3,
+            stepsMessage: newStepMessage
           });
         }else {
           setState({...state, resultsMessage:"You can't go up"})
@@ -58,11 +63,16 @@ export default function AppFunctional(props) {
           document.getElementById("grid").children[
             state.currentIndex + 3
           ].textContent = "B";
-          await setState({
+          let newStepMessage = `You moved ${state.numberOfSteps + 1} time`
+          if(state.numberOfSteps + 1 !== 1) {
+            newStepMessage = newStepMessage + 's'
+          }
+           setState({
             ...state,
             y: state.y + 1,
             numberOfSteps: state.numberOfSteps + 1,
             currentIndex: state.currentIndex + 3,
+            stepsMessage: newStepMessage
           });
         }else {
           setState({...state, resultsMessage:"You can't go down"})
@@ -82,11 +92,16 @@ export default function AppFunctional(props) {
           document.getElementById("grid").children[
             state.currentIndex - 1
           ].textContent = "B";
-          await setState({
+          let newStepMessage = `You moved ${state.numberOfSteps + 1 } time`
+          if(state.numberOfSteps + 1 !== 1) {
+            newStepMessage = newStepMessage + 's'
+          }
+           setState({
             ...state,
             x: state.x - 1,
             numberOfSteps: state.numberOfSteps + 1,
             currentIndex: state.currentIndex - 1,
+            stepsMessage: newStepMessage
           });
         }else {
           setState({...state, resultsMessage:"You can't go left"})
@@ -106,11 +121,16 @@ export default function AppFunctional(props) {
           document.getElementById("grid").children[
             state.currentIndex + 1
           ].textContent = "B";
-          await setState({
+          let newStepMessage = `You moved ${state.numberOfSteps + 1} time`
+          if(state.numberOfSteps + 1 !== 1) {
+            newStepMessage = newStepMessage + 's'
+          }
+           setState({
             ...state,
             x: state.x + 1,
             numberOfSteps: state.numberOfSteps + 1,
             currentIndex: state.currentIndex + 1,
+            stepsMessage: newStepMessage
           });
         }else {
           setState({...state, resultsMessage:"You can't go right"})
@@ -141,24 +161,35 @@ export default function AppFunctional(props) {
       numberOfSteps: 0,
       email: "",
       currentIndex: 4,
-      resultsMessage: ""
+      resultsMessage: "",
+      stepsMessage:  'You moved 0 times',
     });
   };
-  const handlesubmit = async (e) => {
+  const handlesubmit = async (e) => {   
     e.preventDefault();
-    if(state.email === '') {
-      setState({...state, resultsMessage: 'Ouch: email is required'})
-    }
     const payload = {
       email: state.email.toString(),
       steps: state.numberOfSteps,
       x: state.x,
       y: state.y,
     };
-    await axios.post(url, payload).then((res) => {
-      setState({ ...state, email: "", resultsMessage: res.data.message });
-    });
+    if(state.email === '') {
+      setState({...state, resultsMessage: 'Ouch: email is required'})
+    } else {
+      await axios.post(url, payload).then((res) => {
+        setState({ ...state, email: "", resultsMessage: res.data.message });
+      }).catch((error)=>{
+        console.log(error.message)
+        if(error.message === "Request failed with status code 403") {
+          setState({ ...state, email: "", resultsMessage: 'foo@bar.baz failure #71' });
+        } else {
+          setState({ ...state, email: "", resultsMessage: 'Ouch: email must be a valid email'});
+        }
+      });
+    }
   };
+
+  //error.response.message.response?
   return (
     <div id="wrapper" className={props.className}>
       <div className="info">

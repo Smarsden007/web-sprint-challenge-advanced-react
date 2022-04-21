@@ -13,6 +13,7 @@ export default class AppClass extends React.Component {
       email: "",
       currentIndex: 4,
       resultsMessage: "",
+      stepMessge: 'You moved 0 times',
     };
   }
 
@@ -20,6 +21,14 @@ export default class AppClass extends React.Component {
     e.preventDefault();
     this.setState({ ...this.state, email: [e.target.value] });
   };
+
+  getStepsMessage() {
+    let newStepMessage = `You moved ${this.state.numberOfSteps + 1} time`
+    if (this.state.numberOfSteps + 1 !== 1) {
+      newStepMessage = newStepMessage + 's'
+    }
+    return newStepMessage
+  }
 
   handleDirectionalInput = async (e) => {
     e.preventDefault();
@@ -38,16 +47,16 @@ export default class AppClass extends React.Component {
           document.getElementById("grid").children[
             this.state.currentIndex - 3
           ].textContent = "B";
-          await this.setState({
+          this.setState({
             ...this.state,
             y: this.state.y - 1,
             numberOfSteps: this.state.numberOfSteps + 1,
             currentIndex: this.state.currentIndex - 3,
+            stepMessge:  this.getStepsMessage()
           });
         } else {
           this.setState({ ...this.state, resultsMessage: "You can't go up" });
         }
-
         break;
       case "down":
         if (this.state.y < 3) {
@@ -63,11 +72,12 @@ export default class AppClass extends React.Component {
           document.getElementById("grid").children[
             this.state.currentIndex + 3
           ].textContent = "B";
-          await this.setState({
+          this.setState({
             ...this.state,
             y: this.state.y + 1,
             numberOfSteps: this.state.numberOfSteps + 1,
             currentIndex: this.state.currentIndex + 3,
+            stepMessge:  this.getStepsMessage()
           });
         } else {
           this.setState({ ...this.state, resultsMessage: "You can't go down" });
@@ -87,11 +97,13 @@ export default class AppClass extends React.Component {
           document.getElementById("grid").children[
             this.state.currentIndex - 1
           ].textContent = "B";
-          await this.setState({
+
+          this.setState({
             ...this.state,
             x: this.state.x - 1,
             numberOfSteps: this.state.numberOfSteps + 1,
             currentIndex: this.state.currentIndex - 1,
+            stepMessge:  this.getStepsMessage()
           });
         } else {
           this.setState({ ...this.state, resultsMessage: "You can't go left" });
@@ -111,11 +123,13 @@ export default class AppClass extends React.Component {
           document.getElementById("grid").children[
             this.state.currentIndex + 1
           ].textContent = "B";
-          await this.setState({
+
+          this.setState({
             ...this.state,
             x: this.state.x + 1,
             numberOfSteps: this.state.numberOfSteps + 1,
             currentIndex: this.state.currentIndex + 1,
+            stepMessge:  this.getStepsMessage()
           });
         } else {
           this.setState({
@@ -146,6 +160,7 @@ export default class AppClass extends React.Component {
       email: "",
       currentIndex: 4,
       resultsMessage: "",
+      stepMessge: 'You moved 0 times'
     });
   };
 
@@ -154,7 +169,7 @@ export default class AppClass extends React.Component {
     if (this.state.email === "") {
       this.setState({
         ...this.state,
-        resultsMessage: "Ouch: email is required",
+        resultsMessage: 'Ouch: email is required',
       });
       return;
     }
@@ -167,6 +182,7 @@ export default class AppClass extends React.Component {
         y: this.state.y,
       })
       .then((res) => {
+
         this.setState({
           ...this.state,
           email: "",
@@ -174,12 +190,19 @@ export default class AppClass extends React.Component {
         });
       })
       .catch((error) => {
-        console.log("### error.response.message ", error.resposnse.message);
-        this.setState({
-          ...this.state,
-          email: "",
-          resultsMessage: error.resposnse,
-        });
+        if (error.message === 'Request failed with status code 403') {
+          this.setState({
+            ...this.state,
+            email: "",
+            resultsMessage: 'foo@bar.baz failure #71',
+          });
+        } else {
+          this.setState({
+            ...this.state,
+            email: "",
+            resultsMessage: 'Ouch: email must be a valid email',
+          });
+        }
       });
   };
   render() {
@@ -188,7 +211,7 @@ export default class AppClass extends React.Component {
       <div id="wrapper" className={className}>
         <div className="info">
           <h3 id="coordinates">{`Coordinates (${this.state.x}, ${this.state.y})`}</h3>
-          <h3 id="steps">{`You moved ${this.state.numberOfSteps} times`}</h3>
+          <h3 id="steps">{this.state.stepMessge}</h3>
         </div>
         <div id="grid">
           <div className="square"></div>
